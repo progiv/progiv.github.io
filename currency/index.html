@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Currency Converter</title>
+  <style>
+    #currencyConverterForm {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Currency Converter</h1>
+  <p id='updatedDate'></p>
+
+  <form id="currencyConverterForm">
+    <div>
+      <label for="USD"></label>
+      <select class="currency-select">
+        <option value="GBP">GBP</option>
+        <option value="RUB">RUB</option>
+      </select>
+      <input type="number" id="USD" class="currency-input">
+    </div>
+  </form>
+
+  <script src="app.js"></script>
+</body>
+</html>
