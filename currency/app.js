@@ -105,6 +105,7 @@ function addCurrencySelect(parent, value) {
   }
   addSelectOption(select, '--');
   select.value = value;
+  select.ariaLabel = `currency-${value}`;
   parent.appendChild(select);
   return select;
 }
@@ -120,15 +121,12 @@ async function drawForm() {
   for (const currency of inputState.chosenCurrencies) {
     div = document.createElement('div');
 
-    label = document.createElement('label');
-    label.htmlFor = currency
-    div.appendChild(label);
-
     addCurrencySelect(div, currency);
 
     input = document.createElement('input');
     input.type = 'number';
     input.id = currency;
+    input.ariaLabel = currency;
     input.className = 'currency-input';
     div.appendChild(input);
 
@@ -146,11 +144,10 @@ async function drawForm() {
 
   document.querySelectorAll('.currency-select').forEach(select => {
     select.addEventListener('change', function() {
+      this.ariaLabel = `currency-${this.value}`
       for (item of this.parentElement.getElementsByTagName('input')) {
         item.id = this.value
-      }
-      for (item of this.parentElement.getElementsByTagName('label')) {
-        item.htmlFor = this.value
+        item.ariaLabel = this.value;
       }
 
       if (this.value == '--') {

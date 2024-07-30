@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Simple currency converter based on cbr.ru rates">
   <title>Currency Converter</title>
   <link rel="icon" href="favicon.svg">
   <style>
@@ -20,11 +21,12 @@
 
   <form id="currencyConverterForm">
     <div>
-      <label for="USD"></label>
-      <select class="currency-select">
+      <label for="currency-USD"></label>
+      <select class="currency-select" id="currency-USD">
         <option value="GBP">GBP</option>
         <option value="RUB">RUB</option>
       </select>
+      <label for="USD"></label>
       <input type="number" id="USD" class="currency-input">
     </div>
   </form>
