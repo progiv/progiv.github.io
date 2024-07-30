@@ -4,12 +4,15 @@ exchangeRates = null;
 inputState = null;
 const dummyState = {
   chosenCurrencies: ['USD', 'EUR', 'GBP', 'RUB'],
-  lastInput: {currency: 'USD', value: 10.0}
+  lastInput: {
+    currency: 'USD',
+    value: 10.0
+  }
 };
 
 // Function to update currency values
 async function updateCurrencyValues() {
-  localStorage.setItem("inputState", JSON.stringify(inputState));
+  saveState();
   const inputValue = inputState.lastInput.value;
   const baseCurrency = inputState.lastInput.currency;
 
@@ -21,7 +24,7 @@ async function updateCurrencyValues() {
     const currency = input.id;
     if (currency !== baseCurrency) {
       const convertedValue = (isNaN(inputValue) ? 0 : inputValue) *
-          exchangeRates[baseCurrency] / exchangeRates[currency];
+        exchangeRates[baseCurrency] / exchangeRates[currency];
       input.value = convertedValue.toFixed(2);
     }
   }
@@ -31,7 +34,7 @@ async function updateCurrencyValues() {
 async function fetchExchangeRatesCBRF() {
   try {
     const response =
-        await fetch('https://cbrf-day.progiv-cloudflare.workers.dev/');
+      await fetch('https://cbrf-day.progiv-cloudflare.workers.dev/');
     const text = await response.text();
 
     // Parse XML
@@ -50,12 +53,12 @@ async function fetchExchangeRatesCBRF() {
         const currency = currencies[i];
         const code = currency.getElementsByTagName('CharCode')[0].textContent;
         const rate = parseFloat(
-            currency.getElementsByTagName('Value')[0].textContent.replace(
-                ',', '.'));
+          currency.getElementsByTagName('Value')[0].textContent.replace(
+            ',', '.'));
         exchangeRates[code] = rate;
       }
 
-      exchangeRates['RUB'] = 1.0;  // for cbrf source
+      exchangeRates['RUB'] = 1.0; // for cbrf source
 
       console.info(`Exchange rates fetched for ${date}`);
       return [date, exchangeRates];
@@ -76,17 +79,36 @@ async function updateRates() {
 async function loadInput() {
   try {
     return JSON.parse(localStorage.getItem("inputState")) || dummyState;
-  } catch(error) {
+  } catch (error) {
     return dummyState;
   }
 }
 
-async function initForm() {
-  // Initial setup
-  // updateCurrencyValues();
-  await updateRates();
-  console.info(exchangeRates);
+function saveState() {
+  localStorage.setItem("inputState", JSON.stringify(inputState));
+}
 
+function addSelectOption(select, value) {
+  select_option = document.createElement('option')
+  select_option.value = value;
+  select_option.textContent = value;
+  select.appendChild(select_option);
+  return select_option;
+}
+
+function addCurrencySelect(parent, value) {
+  select = document.createElement('select');
+  select.className = 'currency-select';
+  for (option_currency in exchangeRates) {
+    addSelectOption(select, option_currency);
+  }
+  addSelectOption(select, '--');
+  select.value = value;
+  parent.appendChild(select);
+  return select;
+}
+
+async function drawForm() {
   document.getElementById('ratesDate').textContent = `rates for: ${date}`;
 
   inputState = await loadInput();
@@ -101,16 +123,7 @@ async function initForm() {
     label.htmlFor = currency
     div.appendChild(label);
 
-    select = document.createElement('select');
-    select.className = 'currency-select';
-    for (option_currency in exchangeRates) {
-      select_option = document.createElement('option')
-      select_option.value = option_currency;
-      select_option.textContent = option_currency;
-      select.appendChild(select_option);
-    }
-    select.value = currency;
-    div.appendChild(select);
+    addCurrencySelect(div, currency);
 
     input = document.createElement('input');
     input.type = 'number';
@@ -138,15 +151,42 @@ async function initForm() {
       for (item of this.parentElement.getElementsByTagName('label')) {
         item.htmlFor = this.value
       }
-      inputState.chosenCurrencies = [... converterForm.getElementsByTagName('input')].map((element) => element.id);
-      updateCurrencyValues()      
+
+      if (this.value == '--') {
+        inputState.chosenCurrencies = [...converterForm.getElementsByTagName('input')].map((element) => element.id).filter((currency) => currency != '--');
+        saveState()
+        drawForm();
+        return;
+      }
+
+      inputState.chosenCurrencies = [...converterForm.getElementsByTagName('input')].map((element) => element.id);
+      updateCurrencyValues()
     });
+  })
+
+  div = document.createElement('div');
+  select = addCurrencySelect(div, '--');
+  converterForm.appendChild(div);
+
+  select.addEventListener('change', function() {
+    if (!inputState.chosenCurrencies.includes(this.value) && this.value != '--') {
+      inputState.chosenCurrencies.push(this.value);
+      saveState();
+      drawForm();
+    }
   })
 
   if (element = document.getElementById(inputState.lastInput.currency)) {
     element.value = inputState.lastInput.value;
   }
   await updateCurrencyValues();
+}
+
+async function initForm() {
+  await updateRates();
+  console.info(exchangeRates);
+
+  await drawForm();
 }
 
 initForm();
