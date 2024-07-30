@@ -55,7 +55,8 @@ async function fetchExchangeRatesCBRF() {
         const rate = parseFloat(
           currency.getElementsByTagName('Value')[0].textContent.replace(
             ',', '.'));
-        exchangeRates[code] = rate;
+        const nominal = parseInt(currency.getElementsByTagName('Nominal')[0].textContent)
+        exchangeRates[code] = rate / nominal;
       }
 
       exchangeRates['RUB'] = 1.0; // for cbrf source
