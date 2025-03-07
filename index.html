@@ -1,14 +1,80 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html lang="ru">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="refresh" content="0; url=https://yandex.ru/maps/-/CHBjr6Ke">
-        <script type="text/javascript">
-            window.location.href = "https://yandex.ru/maps/-/CHBjr6Ke"
-        </script>
-        <title>КаМиВа</title>
-    </head>
-    <body>
-        Если не перенаправило автоматически, вот <a href='https://yandex.ru/maps/-/CHBjr6Ke'>КаМиВа на картах</a>.
-    </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Обувной магазин</title>
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        img {
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+            margin: 10px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+        .link {
+            display: block;
+            margin-top: 10px;
+            font-size: 18px;
+            color: blue;
+            text-decoration: none;
+        }
+        a {
+            display: block
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Обувной центр «КаМиВа»</h1>
+            <p>Качественная обувь для всей семьи</p>
+        </header>
+        <section>
+            <div>
+                <img src="kamiva/bonavi.jpg" alt="Обувь 1">
+                <img src="kamiva/strobbs.webp" alt="Обувь 2">
+                <img src="kamiva/rieker.jpg" alt="Обувь 3">
+                <img src="kamiva/rieker2.jpg" alt="Обувь 4">
+            </div>
+        </section>
+
+        <section>
+            <h2>Контакты</h2>
+            <a href="tel:+7(8352)40-66-65">+7 (8352) 40-66-65</a>
+            <img src="kamiva/entrance.webp" alt="Фасад магазина" class>
+        </section>
+        
+        <section>
+            <h2>Как нас найти</h2>
+            <div aria-orientation="vertical">
+                <a href="https://yandex.ru/maps/-/CHBjr6Ke" target="_blank">КаМиВа на Яндекс Картах</a>
+                <a href="https://go.2gis.com/heZQ6" target="_blank">КаМиВа в 2gis</a>
+            </div>
+        </section>
+    </div>
+</body>
 </html>
